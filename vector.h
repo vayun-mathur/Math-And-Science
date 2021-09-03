@@ -104,9 +104,9 @@ struct augmented_matrix {
 		std::swap(b.components[x], b.components[y]);
 	}
 
-	void scale_row(int row, double factor) {
+	void divide_row(int row, float factor) {
 		for (int i = 0; i < n; i++) {
-			a.components[row][i] *= factor;
+			a.components[row][i] /= factor;
 		}
 		b.components[row] *= factor;
 	}
@@ -114,42 +114,91 @@ struct augmented_matrix {
 	void combine_rows(int dest, int src, double factor) {
 		for (int i = 0; i < n; i++) {
 			a.components[dest][i] += a.components[src][i] * factor;
+			if (abs(a.components[dest][i]) < 1e-6) {
+				a.components[dest][i] = 0;
+			}
 		}
 		b.components[dest] += b.components[src] * factor;
-	}
-
-	void ref() {
-		int column = 0;
-		int row = 0;
-		while (column < n && row < m) {
-			if (a.components[row][column] == 0) {
-				for (int r = row + 1; r < m; r++) {
-					if (a.components[r][column] != 0) {
-						swap_rows(row, r);
-						break;
-					}
-				}
-			}
-			if (a.components[row][column] != 0) {
-				scale_row(row, 1.0 / a.components[row][column]);
-				for (int r = row + 1; r < m; r++) {
-					combine_rows(r, row, -a.components[r][column]);
-				}
-				row++;
-			}
-			column++;
+		if (abs(b.components[dest]) < 1e-6) {
+			b.components[dest] = 0;
 		}
 	}
 
-	void rref() {
-		ref();
-		for (int r = 1; r < m; r++) {
-			int column = 0;
-			while (a.components[r][column] == 0 && column < n) column++;
-			if (column == n) continue;
-			for (int r2 = 0; r2 < r; r2++) {
-				combine_rows(r2, r, -a.components[r2][column]);
+	void move_empty_rows_bottom() {
+		int bottom = m-1;
+		for (int row = 0; row < bottom; row++) {
+			bool row_empty = true;
+			for (int c = 0; c < n; c++) {
+				if (a.components[row][c] != 0) {
+					row_empty = false;
+					break;
+				}
+			}
+			if (row_empty) {
+				swap_rows(row, bottom);
+				row--;
+				bottom--;
+			}
+		}
+	}
+
+	void rref()
+	{
+		move_empty_rows_bottom();
+		int lead = 0;
+
+		for (int row = 0; row < m; ++row)
+		{
+			if (lead >= n)
+				return;
+			int i = row;
+			while (a.components[i][lead] == 0)
+			{
+				++i;
+				if (i >= m)
+				{
+					i = row;
+					++lead;
+					if (lead >= n)
+						return;
+				}
+			}
+			swap_rows(i, row);
+			divide_row(row, a.components[row][lead]);
+			for (i = 0; i < m; ++i)
+			{
+				if (i != row) {
+					combine_rows(i, row, -a.components[i][lead]);
+				}
 			}
 		}
 	}
 };
+
+template<int n>
+void print(vector<n>& v) {
+	for (int i = 0; i < n; i++) {
+		std::cout << v.components[i] << std::endl;
+	}
+	std::cout << std::endl;
+}
+template<int n, int m>
+void print(matrix<n, m>& v) {
+	for (int j = 0; j < m; j++) {
+		for (int i = 0; i < n; i++) {
+			std::cout << v.components[j][i] << "\t";
+		}
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
+}
+template<int m, int n>
+void print(augmented_matrix<m, n>& v) {
+	for (int j = 0; j < 6; j++) {
+		for (int i = 0; i < n; i++) {
+			std::cout << v.a.components[j][i] << "\t";
+		}
+		std::cout << "|\t" << v.b.components[j] << std::endl;
+	}
+	std::cout << std::endl;
+}

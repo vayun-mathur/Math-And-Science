@@ -31,4 +31,6 @@ struct atom {
 	std::wstring to_string();
 };
 
+void init();
+
 atom_data get_atom_by_symbol(std::string symbol);

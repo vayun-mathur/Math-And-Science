@@ -51,7 +51,7 @@ struct equation {
 		//matrix m(20, left.size() + right.size());
 		switch (left.size() + right.size()) {
 		case 4:
-			matrix<10, 4> m;
+			matrix<118, 4> m;
 			for (int i = 0; i < left.size(); i++) {
 				std::map<int, int> atom_count = left[i].molecule.get_atom_count();
 				for (auto&& [atom_number, count] : atom_count) {
@@ -64,17 +64,17 @@ struct equation {
 					m.components[atom_number][i + left.size()] = -count;
 				}
 			}
-			vector<10> v;
-			augmented_matrix<10, 4> a(m, v);
+			vector<118> v;
+			augmented_matrix<118, 4> a(m, v);
 			a.rref();
-			vector<10> v2;
-			for (int i = 0; i < 10; i++) {
+			vector<118> v2;
+			for (int i = 0; i < 118; i++) {
 				v2.components[i] = a.a.components[i][left.size() + right.size() - 1] * -1;
 			}
 			for (int factor = 1; factor < 50; factor++) {
-				vector<10> v3 = v2 * factor;
+				vector<118> v3 = v2 * factor;
 				bool correct = true;
-				for (int i = 0; i < 10; i++) {
+				for (int i = 0; i < 118; i++) {
 					if (abs(v3.components[i] - round(v3.components[i])) > 0.02) {
 						correct = false;
 					}
