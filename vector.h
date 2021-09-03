@@ -19,6 +19,14 @@ struct vector {
 	vector(const vector<n>& other) {
 		memcpy(components, other.components, sizeof(float) * n);
 	}
+
+	vector<n> operator*(float factor) {
+		vector<n> v;
+		for (int i = 0; i < n; i++) {
+			v.components[i] = components[i] * factor;
+		}
+		return v;
+	}
 };
 
 //m rows, n columns
@@ -137,9 +145,10 @@ struct augmented_matrix {
 		ref();
 		for (int r = 1; r < m; r++) {
 			int column = 0;
-			while (a.components[r][column] == 0) column++;
+			while (a.components[r][column] == 0 && column < n) column++;
+			if (column == n) continue;
 			for (int r2 = 0; r2 < r; r2++) {
-				combine_rows(r2, r, -a.components[r][column]);
+				combine_rows(r2, r, -a.components[r2][column]);
 			}
 		}
 	}
