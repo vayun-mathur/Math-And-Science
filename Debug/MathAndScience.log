@@ -1,0 +1,11 @@
+﻿  main.cpp
+C:\Users\Vayun Mathur\OneDrive\Documents\code\c++\MathAndScience\vector.h(108,1): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Vayun Mathur\OneDrive\Documents\code\c++\MathAndScience\vector.h(106): message : while compiling class template member function 'void augmented_matrix<3,4>::combine_rows(int,int,double)'
+C:\Users\Vayun Mathur\OneDrive\Documents\code\c++\MathAndScience\main.cpp(47): message : see reference to function template instantiation 'void augmented_matrix<3,4>::combine_rows(int,int,double)' being compiled
+C:\Users\Vayun Mathur\OneDrive\Documents\code\c++\MathAndScience\main.cpp(44): message : see reference to class template instantiation 'augmented_matrix<3,4>' being compiled
+C:\Users\Vayun Mathur\OneDrive\Documents\code\c++\MathAndScience\vector.h(110,1): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Vayun Mathur\OneDrive\Documents\code\c++\MathAndScience\vector.h(101,1): warning C4244: '*=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Vayun Mathur\OneDrive\Documents\code\c++\MathAndScience\vector.h(99): message : while compiling class template member function 'void augmented_matrix<3,4>::scale_row(int,double)'
+C:\Users\Vayun Mathur\OneDrive\Documents\code\c++\MathAndScience\vector.h(126): message : see reference to function template instantiation 'void augmented_matrix<3,4>::scale_row(int,double)' being compiled
+C:\Users\Vayun Mathur\OneDrive\Documents\code\c++\MathAndScience\vector.h(103,1): warning C4244: '*=': conversion from 'double' to 'float', possible loss of data
+  MathAndScience.vcxproj -> C:\Users\Vayun Mathur\OneDrive\Documents\code\c++\MathAndScience\Debug\MathAndScience.exe
