@@ -8,6 +8,7 @@ struct atom_term { atom atom; int count; };
 struct molecule {
 
 	std::vector<atom_term> atoms;
+	int charge;
 
 	molecule(std::string formula);
 

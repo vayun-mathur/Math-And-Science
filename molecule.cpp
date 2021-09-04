@@ -30,7 +30,26 @@ molecule::molecule(std::string formula)
 	for (char c : formula) {
 		if (c >= 'A' && c <= 'Z') atoms_cnt++;
 	}
-	int idx = 0;
+
+	int idx = formula.find_first_of('^');
+	if(idx == std::string::npos) {
+		charge = 0;
+	}
+	else {
+		std::string s = formula.substr(idx + 1);
+		if (s == "-") {
+			charge = -1;
+		}
+		else if (s == "+") {
+			charge = 1;
+		}
+		else {
+			charge = stoi(s.substr(0, s.size())) * (s[s.size() - 1] == '-' ? -1 : 1);
+		}
+		formula = formula.substr(0, idx);
+	}
+
+	idx = 0;
 	for (int i = 0; i < atoms_cnt; i++) {
 		int nextIdx = idx + 1;
 		while (nextIdx < formula.size() && !(formula[nextIdx] >= 'A' && formula[nextIdx] <= 'Z')) nextIdx++;
@@ -63,6 +82,10 @@ std::wstring molecule::to_string()
 		s += term.atom.to_string();
 		s += subscript(term.count);
 	}
+	if (charge == -1) s += L'⁻';
+	else if (charge == 1) s += L'⁺';
+	else if (charge > 1) s += superscript(charge) + L'⁺';
+	else if (charge < -1) s += superscript(-charge) + L'⁻';
 	return s;
 }
 

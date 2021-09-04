@@ -1,17 +1,18 @@
 ﻿#include "equation.h"
 #include <iostream>
+#include <regex>
 
 std::vector<std::string> split(std::string s, std::string del = " ")
 {
 	std::vector<std::string> vec;
-	int start = 0;
-	int end = s.find(del);
-	while (end != -1) {
-		vec.push_back(s.substr(start, end - start));
-		start = end + del.size();
-		end = s.find(del, start);
-	}
-	vec.push_back(s.substr(start, end - start));
+	std::regex rgx(del);
+	std::sregex_token_iterator iter(s.begin(),
+		s.end(),
+		rgx,
+		-1);
+	std::sregex_token_iterator end;
+	for (; iter != end; ++iter)
+		vec.push_back(*iter);
 	return vec;
 }
 
@@ -23,16 +24,16 @@ void trim(std::string& str) {
 
 equation::equation(std::string formula)
 {
-	auto idx = formula.find_first_of("-->");
+	auto idx = formula.find("-->");
 	std::string left = formula.substr(0, idx);
 	std::string right = formula.substr(idx + 3);
-	for (std::string s : split(left, "+")) {
+	for (std::string s : split(left, R"(([^\^]\+))")) {
 		trim(s);
 		int idx = 0;
 		while (s[idx] >= '0' && s[idx] <= '9') idx++;
 		this->left.push_back({ molecule(s.substr(idx)), idx == 0 ? 1 : stoi(s.substr(0, idx)) });
 	}
-	for (std::string s : split(right, "+")) {
+	for (std::string s : split(right, R"(([^\^]\+))")) {
 		trim(s);
 		int idx = 0;
 		while (s[idx] >= '0' && s[idx] <= '9') idx++;

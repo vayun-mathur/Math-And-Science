@@ -30,7 +30,7 @@ int main() {
 	print(b);
 	*/
 	init();
-	equation e = equation("PCl_5 + H_2O --> H_3PO_4 + HCl");
+	equation e = equation("H^+ + MnO_4^- + CN^- --> CNO^- + MnO_2 + H_2O");
 	e.balance();
 	_setmode(_fileno(stdout), _O_U16TEXT);
 	std::wcout << equation_string(e) << std::endl;
